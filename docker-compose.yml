@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./  # Builds from ./api/Dockerfile
+    ports:
+      - "8080:80"  # Expose API port
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=P@ssw0rd
+      - MSSQL_PID=Express  # (or "Developer" for full features)
+    ports:
+      - "1433:1433"  # Default SQL Server port
+    volumes:
+      - sql_data:/var/opt/mssql  # Persist data
+
+volumes:
+  sql_data:  # Named volume for SQL data
